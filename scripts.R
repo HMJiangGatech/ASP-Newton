@@ -99,7 +99,11 @@ test_lognet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN =
   print(mean(picasso.KKTerr))
   cat("last KKT error: \n")
   print(err[nlambda])
-  
+  if(!is.null(data$true_beta))
+  {  
+    cat("estimation error: \n")
+    print(norm(as.matrix(fitp$beta[,nlambda] - data$true_beta)))
+  }
   
   if (!("glmnet" %in% skip)){
     cat("glmnet timing:\n")
@@ -200,6 +204,12 @@ test_gausnet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN 
   print(mean(picasso.KKTerr))
   cat("last KKT error: \n")
   print(err[nlambda])
+  if(!is.null(data$true_beta))
+  {  
+    cat("estimation error: \n")
+    print(norm(as.matrix(fitp$beta[,nlambda] - data$true_beta)))
+  }
+
   
   
   if (!("glmnet" %in% skip)){
@@ -226,6 +236,11 @@ test_gausnet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN 
     print(mean(KKTerr))
     cat("last KKT error: \n")
     print(err[nlambda])
+    if(!is.null(data$true_beta))
+    {  
+      cat("estimation error: \n")
+      print(norm(as.matrix(fit$beta[,nlambda] - data$true_beta)))
+    }
   }
   # 
   # if (!("gcdnet" %in% skip)){
@@ -301,6 +316,11 @@ test_poi <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN = 10
   print(mean(picasso.KKTerr))
   cat("last KKT error: \n")
   print(err[nlambda])
+  if(!is.null(data$true_beta))
+  {  
+    cat("estimation error: \n")
+    print(norm(as.matrix(fitp$beta[,nlambda] - data$true_beta)))
+  }
   
   
   if (!("glmnet" %in% skip)){
