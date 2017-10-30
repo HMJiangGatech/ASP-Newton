@@ -33,8 +33,8 @@ double compute_lognet_loss(NumericMatrix X, NumericVector y,
 
 // [[Rcpp::export]]
 double compute_lognet_KKT(NumericMatrix X, NumericVector y, 
-                           NumericVector Xbeta, NumericVector beta, 
-                           double a0, double lambda) {
+                          NumericVector Xbeta, NumericVector beta, 
+                          double a0, double lambda) {
   int n = X.nrow();
   int d = X.ncol();
   
@@ -66,7 +66,92 @@ double compute_lognet_KKT(NumericMatrix X, NumericVector y,
       else 
         grad[i] = grad[i] - lambda;
     }
+    
+    if (fabs(grad[i]) > grad_max)
+      grad_max = fabs(grad[i]);
+  }
+  return(grad_max);
+}
 
+// [[Rcpp::export]]
+double compute_gausnet_KKT(NumericMatrix X, NumericVector y, 
+                           NumericVector Xbeta, NumericVector beta, 
+                           double a0, double lambda) {
+  int n = X.nrow();
+  int d = X.ncol();
+  
+  NumericVector grad(d);
+  for (int i = 0; i < d; i++)
+    grad[i] = 0;
+  
+  double tmp = 0;
+  for (int i = 0; i < n; i++){
+    tmp = -y[i] + Xbeta[i]+a0;
+    for (int j = 0; j < d; j++)
+      grad[j] += tmp* X(i,j)/n;
+  }
+  
+  double grad_max = 0;
+  for (int i = 0; i < d; i++){
+    if (fabs(beta[i]) < 1e-8 ){
+      if (fabs(grad[i])<lambda){
+        grad[i] = 0;
+      } else{
+        if (grad[i] >0 )
+          grad[i] = grad[i] - lambda;
+        else
+          grad[i] = grad[i] + lambda;
+      }
+    } else {
+      if (beta[i] >= 1e-8)
+        grad[i] = grad[i] + lambda;
+      else 
+        grad[i] = grad[i] - lambda;
+    }
+    
+    if (fabs(grad[i]) > grad_max)
+      grad_max = fabs(grad[i]);
+  }
+  return(grad_max);
+}
+
+
+// [[Rcpp::export]]
+double compute_poi_KKT(NumericMatrix X, NumericVector y, 
+                           NumericVector Xbeta, NumericVector beta, 
+                           double a0, double lambda) {
+  int n = X.nrow();
+  int d = X.ncol();
+  NumericVector XbetaExp = exp( Xbeta + a0);
+  NumericVector grad(d);
+  for (int i = 0; i < d; i++)
+    grad[i] = 0;
+  
+  double tmp = 0;
+  for (int i = 0; i < n; i++){
+    tmp = XbetaExp[i] - y[i];
+    for (int j = 0; j < d; j++)
+      grad[j] += tmp* X(i,j)/n;
+  }
+  
+  double grad_max = 0;
+  for (int i = 0; i < d; i++){
+    if (fabs(beta[i]) < 1e-8 ){
+      if (fabs(grad[i])<lambda){
+        grad[i] = 0;
+      } else{
+        if (grad[i] >0 )
+          grad[i] = grad[i] - lambda;
+        else
+          grad[i] = grad[i] + lambda;
+      }
+    } else {
+      if (beta[i] >= 1e-8)
+        grad[i] = grad[i] + lambda;
+      else 
+        grad[i] = grad[i] - lambda;
+    }
+    
     if (fabs(grad[i]) > grad_max)
       grad_max = fabs(grad[i]);
   }
