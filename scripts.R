@@ -26,7 +26,7 @@ generate_sim_poi <- function(n, d, c, seed=111) {
   Y <- rpois(n, lambda)
   X <- X[Y<1e4,] # prevent too large Y
   Y <- Y[Y<1e4] # prevent too large Y
-  return(list(X=X, Y=c(Y)))
+  return(list(X=X, Y=c(Y), true_beta=c(true_beta)))
 }
 
 generate_sim_lognet <- function(n, d, c, seed=111) {
@@ -38,7 +38,7 @@ generate_sim_lognet <- function(n, d, c, seed=111) {
   prob <- exp(linpred)/(1 + exp(linpred))
   runis <- runif(n,0,1)
   Y <- ifelse(runis < prob,1,0)
-  return(list(X=X, Y=c(Y)))
+  return(list(X=X, Y=c(Y), true_beta=c(true_beta)))
 }
 
 generate_sim<- function(n, d, c, seed=111) {
@@ -48,7 +48,7 @@ generate_sim<- function(n, d, c, seed=111) {
   true_beta <- c(runif(s), rep(0, d-s)) 
   Y <- X%*%true_beta+rnorm(n)*5
   Y <- Y - mean(Y)
-  return(list(X=X, Y=c(Y)))
+  return(list(X=X, Y=c(Y), true_beta=c(true_beta)))
 }
 
 pathfista <- function(data, lambdas, tol=1e-6, max_it=100, lostfamily='logistic'){
@@ -97,8 +97,8 @@ test_lognet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN =
   print(sqrt(var(picasso.rtime)))
   cat("mean KKT error: \n")
   print(mean(picasso.KKTerr))
-  cat("standard deviation of KKT error: \n")
-  print(sqrt(var(picasso.KKTerr)))
+  cat("last KKT error: \n")
+  print(err[nlambda])
   
   
   if (!("glmnet" %in% skip)){
@@ -123,8 +123,8 @@ test_lognet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN =
     print(sqrt(var(rtime)))
     cat("mean KKT error: \n")
     print(mean(KKTerr))
-    cat("standard deviation of KKT error: \n")
-    print(sqrt(var(KKTerr)))
+    cat("last KKT error: \n")
+    print(err[nlambda])
   }
   # 
   # if (!("gcdnet" %in% skip)){
@@ -198,8 +198,8 @@ test_gausnet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN 
   print(sqrt(var(picasso.rtime)))
   cat("mean KKT error: \n")
   print(mean(picasso.KKTerr))
-  cat("standard deviation of KKT error: \n")
-  print(sqrt(var(picasso.KKTerr)))
+  cat("last KKT error: \n")
+  print(err[nlambda])
   
   
   if (!("glmnet" %in% skip)){
@@ -224,8 +224,8 @@ test_gausnet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN 
     print(sqrt(var(rtime)))
     cat("mean KKT error: \n")
     print(mean(KKTerr))
-    cat("standard deviation of KKT error: \n")
-    print(sqrt(var(KKTerr)))
+    cat("last KKT error: \n")
+    print(err[nlambda])
   }
   # 
   # if (!("gcdnet" %in% skip)){
@@ -299,8 +299,8 @@ test_poi <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN = 10
   print(sqrt(var(picasso.rtime)))
   cat("mean KKT error: \n")
   print(mean(picasso.KKTerr))
-  cat("standard deviation of KKT error: \n")
-  print(sqrt(var(picasso.KKTerr)))
+  cat("last KKT error: \n")
+  print(err[nlambda])
   
   
   if (!("glmnet" %in% skip)){
@@ -325,7 +325,7 @@ test_poi <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN = 10
     print(sqrt(var(rtime)))
     cat("mean KKT error: \n")
     print(mean(KKTerr))
-    cat("standard deviation of KKT error: \n")
-    print(sqrt(var(KKTerr)))
+    cat("last KKT error: \n")
+    print(err[nlambda])
   }
 }
