@@ -1,5 +1,5 @@
 ## Notice that the precision have to be fine tunned for getting comparable results
-setwd("~/Desktop/2018 MPB Prox-Newton/2018 mpb prox-newton/testcode")
+# setwd("~/Desktop/2018 MPB Prox-Newton/2018 mpb prox-newton/testcode")
 # loading and installing required packages
 library(Rcpp)
 library(glmnet)
@@ -12,11 +12,11 @@ sourceCpp("utils.cpp")
 
 # Experiment parameters
 # skip some comparison
-skip = c("glmnet")
+skip = c("")
 useRealData = FALSE
 # for simulated data set
-n = 2000
-d = 10000
+n = 200
+d = 1000
 
 
 # Linear Regression
