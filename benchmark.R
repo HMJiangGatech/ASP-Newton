@@ -1,5 +1,5 @@
 ## Notice that the precision have to be fine tunned for getting comparable results
-# setwd("~/Desktop/2018 MPB Prox-Newton/2018 mpb prox-newton/testcode")
+setwd("~/Desktop/2018 MPB Prox-Newton/2018 mpb prox-newton/testcode")
 # loading and installing required packages
 library(Rcpp)
 library(glmnet)
@@ -12,11 +12,11 @@ sourceCpp("utils.cpp")
 
 # Experiment parameters
 # skip some comparison
-skip = c("")
+skip = c("glmnet")
 useRealData = FALSE
 # for simulated data set
-n = 200
-d = 1000
+n = 2000
+d = 10000
 
 
 # Linear Regression
@@ -25,8 +25,8 @@ set.seed(111)
 # Simulated data
 sim_wc <- generate_sim(n=n, d=d, c=0.3, seed=111) 
 sim_ic <- generate_sim(n=n, d=d, c=3.0, seed=112)
-test_gausnet(sim_wc,skip=skip,trialN = 1,prec=1*1e-4)
-test_gausnet(sim_ic,skip=skip,trialN = 1,prec=1*1e-4)
+test_gausnet(sim_wc,skip=skip,trialN = 1,prec=1*1e-8)
+test_gausnet(sim_ic,skip=skip,trialN = 1,prec=1*1e-6)
 
 # Real Data
 if(useRealData)
