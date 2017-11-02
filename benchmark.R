@@ -25,8 +25,8 @@ set.seed(111)
 # Simulated data
 sim_wc <- generate_sim(n=n, d=d, c=0.3, seed=111) 
 sim_ic <- generate_sim(n=n, d=d, c=3.0, seed=112)
-test_gausnet(sim_wc,skip=skip,trialN = 1,prec=1*1e-12)
-test_gausnet(sim_ic,skip=skip,trialN = 1,prec=1*1e-12)
+test_gausnet(sim_wc,skip=skip,trialN = 1,prec=1*1e-4)
+test_gausnet(sim_ic,skip=skip,trialN = 1,prec=1*1e-4)
 
 # Real Data
 if(useRealData)
@@ -53,8 +53,8 @@ set.seed(111)
 # Simulated data
 sim_wc <- generate_sim_lognet(n=n, d=d, c=0.3, seed=111)
 sim_ic <- generate_sim_lognet(n=n, d=d, c=3.0, seed=112)
-test_lognet(sim_wc,skip=skip,trialN = 10,prec=1.0*1e-8)
-test_lognet(sim_ic,skip=skip,trialN = 10,prec=1.0*1e-8)
+test_lognet(sim_wc,skip=skip,trialN = 1,prec=1.0*1e-4)
+test_lognet(sim_ic,skip=skip,trialN = 1,prec=1.0*1e-4)
 
 
 # Real Data
@@ -88,8 +88,8 @@ set.seed(111)
 # Simulated data
 sim_wc <- generate_sim_poi(n=n, d=d, c=0.03, seed=111)
 sim_ic <- generate_sim_poi(n=n, d=d, c=0.1, seed=112)
-test_poi(sim_wc,skip=skip,trialN = 10,prec=1*1e-8)
-test_poi(sim_ic,skip=skip,trialN = 10,prec=1*1e-8)
+test_poi(sim_wc,skip=skip,trialN = 1,prec=1*1e-4)
+test_poi(sim_ic,skip=skip,trialN = 1,prec=1*1e-4)
 
 # Real Data
 if(useRealData)

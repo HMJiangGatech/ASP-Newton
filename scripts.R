@@ -82,7 +82,7 @@ test_lognet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN =
   picasso.rtime <- rep(0, trialN) 
   picasso.KKTerr <- rep(0, trialN)
   for (i in 1:trialN){
-    t <- system.time(fitp<-picasso(data$X, data$Y,family="binomial", lambda.min.ratio=ratio,
+    t <- system.time(fitp<-picasso(data$X, data$Y,family="binomial", lambda.min.ratio=ratio, #alg = "proximal",
                                    standardize=FALSE, verbose=FALSE, prec=prec, nlambda=nlambda))
     picasso.rtime[i] <- t[1]
     err <- rep(0, nlambda)
@@ -193,7 +193,7 @@ test_gausnet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN 
   picasso.rtime <- rep(0, trialN) 
   picasso.KKTerr <- rep(0, trialN)
   for (i in 1:trialN){
-    t <- system.time(fitp<-picasso(data$X, data$Y,family="gaussian", lambda.min.ratio=ratio, type.gaussian = "naive",
+    t <- system.time(fitp<-picasso(data$X, data$Y,family="gaussian", lambda.min.ratio=ratio, #alg = "proximal",
                                    standardize=FALSE, verbose=FALSE, prec=prec, nlambda=nlambda))
     picasso.rtime[i] <- t[1]
     err <- rep(0, nlambda)
@@ -305,7 +305,7 @@ test_poi <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN = 10
   picasso.rtime <- rep(0, trialN) 
   picasso.KKTerr <- rep(0, trialN)
   for (i in 1:trialN){
-    t <- system.time(fitp<-picasso(data$X, data$Y,family="poisson", lambda.min.ratio=ratio,
+    t <- system.time(fitp<-picasso(data$X, data$Y,family="poisson", lambda.min.ratio=ratio, #alg = "proximal",
                                    standardize=FALSE, verbose=FALSE, prec=prec, nlambda=nlambda))
     picasso.rtime[i] <- t[1]
     err <- rep(0, nlambda)
