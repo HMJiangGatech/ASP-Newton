@@ -15,18 +15,20 @@ sourceCpp("utils.cpp")
 skip = c("glmnet")
 useRealData = FALSE
 # for simulated data set
-n = 2000
-d = 10000
+n = 30000
+d = 20000
 
 
 # Linear Regression
 set.seed(111)
 
 # Simulated data
-sim_wc <- generate_sim(n=n, d=d, c=0.3, seed=111) 
-sim_ic <- generate_sim(n=n, d=d, c=3.0, seed=112)
-test_gausnet(sim_wc,skip=skip,trialN = 1,prec=1*1e-4)
-test_gausnet(sim_ic,skip=skip,trialN = 1,prec=1*1e-4)
+sim_data <- generate_sim(n=n, d=d, c=0.3, seed=111) 
+test_gausnet(sim_data,skip=skip,trialN = 10,prec=1*1e-4,ratio=0.2)
+rm(sim_data)
+sim_data <- generate_sim(n=n, d=d, c=3.0, seed=112)
+test_gausnet(sim_data,skip=skip,trialN = 10,prec=1*1e-4,ratio=0.2)
+rm(sim_data)
 
 # Real Data
 if(useRealData)
@@ -51,10 +53,12 @@ if(useRealData)
 set.seed(111)
 
 # Simulated data
-sim_wc <- generate_sim_lognet(n=n, d=d, c=0.3, seed=111)
-sim_ic <- generate_sim_lognet(n=n, d=d, c=3.0, seed=112)
-test_lognet(sim_wc,skip=skip,trialN = 1,prec=1.0*1e-4)
-test_lognet(sim_ic,skip=skip,trialN = 1,prec=1.0*1e-4)
+sim_data <- generate_sim_lognet(n=n, d=d, c=0.3, seed=111)
+test_lognet(sim_data,skip=skip,trialN = 10,prec=1.0*1e-4,ratio=0.2)
+rm(sim_data)
+sim_data <- generate_sim_lognet(n=n, d=d, c=3.0, seed=112)
+test_lognet(sim_data,skip=skip,trialN = 10,prec=1.0*1e-4,ratio=0.2)
+rm(sim_data)
 
 
 # Real Data
@@ -86,19 +90,19 @@ if(useRealData)
 set.seed(111)
 
 # Simulated data
-sim_wc <- generate_sim_poi(n=n, d=d, c=0.03, seed=111)
-sim_ic <- generate_sim_poi(n=n, d=d, c=0.1, seed=112)
-test_poi(sim_wc,skip=skip,trialN = 1,prec=1*1e-4)
-test_poi(sim_ic,skip=skip,trialN = 1,prec=1*1e-4)
-
-# Real Data
-if(useRealData)
-{
-  load("dataset/linear reg/DrivFace.RData")
-  DrivFace$X[which(is.na(DrivFace$X))] <- 0 # missing values
-  DrivFace$X <- DrivFace$X[ ,find_nonconstant_column(DrivFace$X)]
-  DrivFace$X <- scale(DrivFace$X)
-  DrivFace$Y <- DrivFace$Ang
-  
-  test_gausnet(DrivFace,skip=skip)
-}
+# sim_data <- generate_sim_poi(n=n, d=d, c=0.03, seed=111)
+# test_poi(sim_data,skip=skip,trialN = 1,prec=1*1e-4)
+# sim_data <- generate_sim_poi(n=n, d=d, c=0.1, seed=112)
+# test_poi(sim_data,skip=skip,trialN = 1,prec=1*1e-4)
+# 
+# # Real Data
+# if(useRealData)
+# {
+#   load("dataset/linear reg/DrivFace.RData")
+#   DrivFace$X[which(is.na(DrivFace$X))] <- 0 # missing values
+#   DrivFace$X <- DrivFace$X[ ,find_nonconstant_column(DrivFace$X)]
+#   DrivFace$X <- scale(DrivFace$X)
+#   DrivFace$Y <- DrivFace$Ang
+#   
+#   test_gausnet(DrivFace,skip=skip)
+# }
