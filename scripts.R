@@ -20,7 +20,7 @@ poi_KKT <- function(data, beta, intercept, lambda){
 generate_sim_poi <- function(n, d, c, seed=111) {
   set.seed(seed)
   X <- scale(matrix(rnorm(n*d), n, d)+ c*rnorm(n))
-  s <- 3
+  s <- 20
   true_beta <- c(runif(s), rep(0, d-s)) 
   lambda <- exp(X%*%true_beta)
   Y <- rpois(n, lambda)
@@ -32,7 +32,7 @@ generate_sim_poi <- function(n, d, c, seed=111) {
 generate_sim_lognet <- function(n, d, c, seed=111) {
   set.seed(seed)
   X <- scale(matrix(rnorm(n*d), n, d)+ c*rnorm(n))
-  s <- 3
+  s <- 20
   true_beta <- c(runif(s), rep(0, d-s)) 
   linpred <- X%*%true_beta
   prob <- exp(linpred)/(1 + exp(linpred))
@@ -44,7 +44,7 @@ generate_sim_lognet <- function(n, d, c, seed=111) {
 generate_sim<- function(n, d, c, seed=111) {
   set.seed(seed)
   X <- scale(matrix(rnorm(n*d), n, d)+ c*rnorm(n))
-  s <- 3
+  s <- 20
   true_beta <- c(runif(s), rep(0, d-s)) 
   Y <- X%*%true_beta+rnorm(n)*5
   Y <- Y - mean(Y)

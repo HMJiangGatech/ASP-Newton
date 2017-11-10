@@ -15,8 +15,8 @@ sourceCpp("utils.cpp")
 skip = c("glmnet")
 useRealData = FALSE
 # for simulated data set
-n = 30000
-d = 20000
+n = 2000
+d = 10000
 
 
 # Linear Regression
