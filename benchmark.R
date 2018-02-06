@@ -1,5 +1,6 @@
 ## Notice that the precision have to be fine tunned for getting comparable results
-setwd("~/Desktop/2018 MPB Prox-Newton/2018 mpb prox-newton/testcode")
+#setwd("~/Desktop/2018 MPB Prox-Newton/2018 mpb prox-newton/testcode")
+setwd("~/Desktop/ASP-Newton")
 # loading and installing required packages
 library(Rcpp)
 library(glmnet)
@@ -12,22 +13,29 @@ sourceCpp("utils.cpp")
 
 # Experiment parameters
 # skip some comparison
-skip = c("glmnet")
+skip = c() # c("glmnet")
 useRealData = FALSE
+dolinreg = TRUE
+dologreg = FALSE
+trialN = 10
 # for simulated data set
 n = 2000
 d = 10000
 
 
 # Linear Regression
+if(dolinreg)
+{
 set.seed(111)
 
 # Simulated data
+print('c=0.3')
 sim_data <- generate_sim(n=n, d=d, c=0.3, seed=111) 
-test_gausnet(sim_data,skip=skip,trialN = 10,prec=1*1e-4,ratio=0.2)
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=1*1e-4,ratio=0.2, nlambda = 10)
 rm(sim_data)
+print('c=3.0')
 sim_data <- generate_sim(n=n, d=d, c=3.0, seed=112)
-test_gausnet(sim_data,skip=skip,trialN = 10,prec=1*1e-4,ratio=0.2)
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=1*1e-4,ratio=0.2, nlambda = 10)
 rm(sim_data)
 
 # Real Data
@@ -46,18 +54,22 @@ if(useRealData)
   test_gausnet(DrivFace,skip=skip)
 }
 
-
+}
 #-----------------------------------------------------------------------------
 
 # Logistic Regression
+if(dologreg)
+{
 set.seed(111)
 
 # Simulated data
+print('c=0.3')
 sim_data <- generate_sim_lognet(n=n, d=d, c=0.3, seed=111)
-test_lognet(sim_data,skip=skip,trialN = 10,prec=1.0*1e-4,ratio=0.2)
+test_lognet(sim_data,skip=skip,trialN = trialN,prec=1.0*1e-4,ratio=0.2, nlambda = 10)
 rm(sim_data)
+print('c=3.0')
 sim_data <- generate_sim_lognet(n=n, d=d, c=3.0, seed=112)
-test_lognet(sim_data,skip=skip,trialN = 10,prec=1.0*1e-4,ratio=0.2)
+test_lognet(sim_data,skip=skip,trialN = trialN,prec=1.0*1e-4,ratio=0.2, nlambda = 10)
 rm(sim_data)
 
 
@@ -83,7 +95,7 @@ if(useRealData)
 
 
 
-
+}
 #-----------------------------------------------------------------------------
 
 # Poisson Regression

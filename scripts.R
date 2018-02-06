@@ -193,12 +193,15 @@ test_gausnet <- function(data, nlambda = 100, ratio=0.01, fista_it = 20, trialN 
   picasso.rtime <- rep(0, trialN) 
   picasso.KKTerr <- rep(0, trialN)
   for (i in 1:trialN){
+    print("start")
     t <- system.time(fitp<-picasso(data$X, data$Y,family="gaussian", lambda.min.ratio=ratio, #alg = "proximal",
                                    standardize=FALSE, verbose=FALSE, prec=prec, nlambda=nlambda))
+    print("end")
+    print(fitp$beta)
     picasso.rtime[i] <- t[1]
     err <- rep(0, nlambda)
     for (j in 1:nlambda){
-      err[j] <- gausnet_KKT(data, fitp$beta[,j], fitp$intercept[j], fitp$lambda[j])
+      system.time(err[j] <- gausnet_KKT(data, fitp$beta[,j], fitp$intercept[j], fitp$lambda[j]))
     }
     picasso.KKTerr[i] <- mean(err)
   }
