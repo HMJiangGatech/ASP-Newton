@@ -1,11 +1,11 @@
 ## Notice that the precision have to be fine tunned for getting comparable results
 #setwd("~/Desktop/2018 MPB Prox-Newton/2018 mpb prox-newton/testcode")
-setwd("~/Desktop/ASP-Newton")
+# setwd("~/Desktop/ASP-Newton")
 # loading and installing required packages
 library(Rcpp)
 library(glmnet)
 library(picasso)
-# library(gcdnet)
+library(gcdnet)
 # library(spams)
 
 source("scripts.R")
@@ -13,7 +13,7 @@ sourceCpp("utils.cpp")
 
 # Experiment parameters
 # skip some comparison
-skip = c() # c("glmnet")
+skip = c("glmnet")
 useRealData = FALSE
 dolinreg = TRUE
 dologreg = FALSE
@@ -31,26 +31,80 @@ set.seed(111)
 # Simulated data
 print('c=0.3')
 sim_data <- generate_sim(n=n, d=d, c=0.3, seed=111) 
+skip = c("glmnet","gcdnet")    # asp-newton
 test_gausnet(sim_data,skip=skip,trialN = trialN,prec=1*1e-4,ratio=0.2, nlambda = 10)
+skip = c("glmnet","gcdnet","oldpicasso")    # greedy
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=4.5*1e-4,ratio=0.2, nlambda = 10)
+skip = c("glmnet","gcdnet","oldpicasso","cyclic")    # cyclic
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=4.3*1e-4,ratio=0.2, nlambda = 10)
+skip = c("picasso","gcdnet")  # glmnet
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=2*1e-6,ratio=0.2, nlambda = 10)
+skip = c("picasso","glmnet")   # gcdnet
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=2*1e-5,ratio=0.2, nlambda = 10)
 rm(sim_data)
 print('c=3.0')
 sim_data <- generate_sim(n=n, d=d, c=3.0, seed=112)
-test_gausnet(sim_data,skip=skip,trialN = trialN,prec=1*1e-4,ratio=0.2, nlambda = 10)
+skip = c("glmnet","gcdnet")    # asp-newton
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=1*1e-6,ratio=0.2, nlambda = 10)
+skip = c("glmnet","gcdnet","oldpicasso")    # greedy
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=2*1e-5,ratio=0.2, nlambda = 10)
+skip = c("glmnet","gcdnet","oldpicasso","cyclic")    # cyclic
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=1*1e-5,ratio=0.2, nlambda = 10)
+skip = c("picasso","gcdnet")  # glmnet
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=1.5*1e-6,ratio=0.2, nlambda = 10)
+skip = c("picasso","glmnet")   # gcdnet
+test_gausnet(sim_data,skip=skip,trialN = trialN,prec=3.5*1e-5,ratio=0.2, nlambda = 10)
 rm(sim_data)
 
 # Real Data
 if(useRealData)
 {
-  load("dataset/linear reg/eyedata.RData")
-  eyedata$X[which(is.na(eyedata$X))] <- 0 # missing values
-  eyedata$X <- eyedata$X[ ,find_nonconstant_column(eyedata$X)]
-  eyedata$X <- scale(eyedata$X)
+  load("DrivFace.RData")
+  x=as.matrix(x)
+  y=as.matrix(y)
+  x=scale(x)
+  y=scale(y)
+  skip = c("glmnet","gcdnet")    # asp-newton
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=1*1e-4,ratio=0.2, nlambda = 10)
+  skip = c("glmnet","gcdnet","oldpicasso")    # greedy
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=5*1e-4,ratio=0.2, nlambda = 10)
+  skip = c("glmnet","gcdnet","oldpicasso","cyclic")    # cyclic
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=5*1e-4,ratio=0.2, nlambda = 10)
+  skip = c("picasso","gcdnet")  # glmnet
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=1*1e-4,ratio=0.2, nlambda = 10)
+  skip = c("picasso","glmnet")   # gcdnet
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=2*1e-5,ratio=0.2, nlambda = 10)
   
-  load("dataset/linear reg/DrivFace.RData")
-  DrivFace$X[which(is.na(DrivFace$X))] <- 0 # missing values
-  DrivFace$X <- DrivFace$X[ ,find_nonconstant_column(DrivFace$X)]
-  DrivFace$X <- scale(DrivFace$X)
-  test_gausnet(eyedata,skip=skip)
+  
+  load("GHG.RData")
+  x=scale(x)
+  y=scale(y)
+  skip = c("glmnet","gcdnet")    # asp-newton
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=1*1e-5,ratio=0.2, nlambda = 10)
+  skip = c("glmnet","gcdnet","oldpicasso")    # greedy
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=8*1e-5,ratio=0.2, nlambda = 10)
+  skip = c("glmnet","gcdnet","oldpicasso","cyclic")    # cyclic
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=8*1e-5,ratio=0.2, nlambda = 10)
+  skip = c("picasso","gcdnet")  # glmnet
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=2*1e-5,ratio=0.2, nlambda = 10)
+  skip = c("picasso","glmnet")   # gcdnet
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=5*1e-6,ratio=0.2, nlambda = 10)
+  
+  
+  load("riboflavin.RData")
+  x=scale(x)
+  y=scale(y)
+  skip = c("glmnet","gcdnet")    # asp-newton
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=1*1e-7,ratio=0.2, nlambda = 10)
+  skip = c("glmnet","gcdnet","oldpicasso")    # greedy
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=1*1e-5,ratio=0.2, nlambda = 10)
+  skip = c("glmnet","gcdnet","oldpicasso","cyclic")    # cyclic
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=1*1e-8,ratio=0.2, nlambda = 10)
+  skip = c("picasso","gcdnet")  # glmnet
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=3*1e-8,ratio=0.2, nlambda = 10)
+  skip = c("picasso","glmnet")   # gcdnet
+  test_gausnet(list(X=x,Y=y),skip=skip,trialN = trialN,prec=5*1e-9,ratio=0.2, nlambda = 10)
+  
   test_gausnet(DrivFace,skip=skip)
 }
 
